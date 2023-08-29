@@ -9,16 +9,16 @@ namespace SchoolManagementSystemKarloStarcevic.Models
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Polje Ime je obavezno.")]
-        [Display(Name = "Ime")]
+        [Required(ErrorMessage = "Field Name is required.")]
+        [Display(Name = "Name")]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "Polje Prezime je obavezno.")]
-        [Display(Name = "Prezime")]
+        [Required(ErrorMessage = "Field Surname is required.")]
+        [Display(Name = "Surname")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "Polje Datum rođenja je obavezno.")]
-        [Display(Name = "Datum rođenja")]
+        [Required(ErrorMessage = "Field Birth date is required.")]
+        [Display(Name = "Birth date")]
         public DateTime BirthDate { get; set; }
 
         public ICollection<Subject> SubjectsTaught { get; set; } = new List<Subject>();
