@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "Home";
+    var teachers = ViewBag.Teachers as List<SchoolManagementSystemKarloStarcevic.Models.Teacher>;
+    var students = ViewBag.Students as List<SchoolManagementSystemKarloStarcevic.Models.Student>;
+    var subjects = ViewBag.Subjects as List<SchoolManagementSystemKarloStarcevic.Models.Subject>;
+    var classSchedule = ViewBag.ClassSchedule as List<SchoolManagementSystemKarloStarcevic.Models.ClassSchedule>;
+}
+
+<h2>Welcome to VSITE!</h2>
+
+<h3>Teachers</h3>
+<ul>
+    @foreach (var teacher in teachers)
+    {
+        <li>@teacher.FirstName @teacher.LastName</li>
+    }
+</ul>
+
+<h3>Students</h3>
+<ul>
+    @foreach (var student in students)
+    {
+        <li>@student.FirstName @student.LastName</li>
+    }
+</ul>
+
+<h3>Subjects and Teachers</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Subject</th>
+            <th>Teacher</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var subject in subjects)
+        {
+            <tr>
+                <td>@subject.SubjectName</td>
+                <td>@subject.Teacher.FirstName @subject.Teacher.LastName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Class Schedule</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Time</th>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var timeSlot in classSchedule.Select(c => c.StartTime.TimeOfDay).Distinct())
+        {
+            <tr>
+                <td>@timeSlot</td>
+                @for (var day = DayOfWeek.Monday; day <= DayOfWeek.Friday; day++)
+                {
+                    var schedule = classSchedule.FirstOrDefault(c => c.StartTime.DayOfWeek == day && c.StartTime.TimeOfDay == timeSlot);
+                    <td>
+                        @if (schedule != null)
+                        {
+                            <p>@schedule.Subject.SubjectName</p>
+                            <p>@schedule.Teacher.FirstName @schedule.Teacher.LastName</p>
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
