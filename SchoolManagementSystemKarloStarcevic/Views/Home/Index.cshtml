@@ -6,56 +6,70 @@
     var classSchedule = ViewBag.ClassSchedule as List<SchoolManagementSystemKarloStarcevic.Models.ClassSchedule>;
 }
 
-<h2>Welcome to VSITE!</h2>
-
-<h3>Teachers</h3>
-<ul>
+<h1>Profesori</h1>
+<div class="d-flex justify-content-center align-items-center flex-row">
     @foreach (var teacher in teachers)
     {
-        <li>@teacher.FirstName @teacher.LastName</li>
+        <div class="d-flex flex-column justify-content-start align-items-center m-4" style="width: 200px; height: auto;">
+            <img src="https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg" class="rounded-circle" style="width: 150px; height: 150px;" />
+            <h3>@teacher.FirstName @teacher.LastName</h3>
+        </div>
+        
     }
-</ul>
-
-<h3>Students</h3>
-<ul>
+</div>
+<hr />
+<h1>Studenti</h1>
+<div class="d-flex justify-content-center align-items-center flex-row">
     @foreach (var student in students)
     {
-        <li>@student.FirstName @student.LastName</li>
+        <div class="d-flex flex-column justify-content-start align-items-center m-4" style="width: 200px; height: auto;">
+            <img src="https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg" class="rounded-circle" style="width: 150px; height: 150px;" />
+            <h3>@student.FirstName @student.LastName</h3>
+        </div>
     }
-</ul>
-
-<h3>Subjects and Teachers</h3>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Subject</th>
-            <th>Teacher</th>
-        </tr>
-    </thead>
-    <tbody>
+</div>
+<hr />
+<h1>Predmeti</h1>
+<div class="d-flex justify-content-center align-items-center flex-row">
         @foreach (var subject in subjects)
         {
-            <tr>
-                <td>@subject.SubjectName</td>
-                <td>@subject.Teacher.FirstName @subject.Teacher.LastName</td>
-            </tr>
+        <div class="d-flex flex-column justify-content-start align-items-center m-4" style="width: 200px; height: auto;">
+                <h3>@subject.SubjectName</h3>
+            <img src="https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg" class="rounded-circle" style="width: 150px; height: 150px;" />
+                <h3>@subject.Teacher.FirstName @subject.Teacher.LastName</h3>
+            </div>
         }
-    </tbody>
-</table>
-
-<h3>Class Schedule</h3>
-<table class="table">
-    <thead>
+</div>
+<hr />
+<h1>Raspored</h1>
+<section id="schedule" class="mt-4">
+    <table class="table" border="2" cellspacing="0" align="center">
         <tr>
-            <th>Time</th>
-            <th>Monday</th>
-            <th>Tuesday</th>
-            <th>Wednesday</th>
-            <th>Thursday</th>
-            <th>Friday</th>
+            <td align="center" height="50" width="100">
+                <br><b>Sati/Dani</b></br>
+            </td>
+            <td align="center" height="50" width="100">
+                <b>Pon</b>
+            </td>
+            <td align="center" height="50" width="100">
+                <b>Uto</b>
+            </td>
+            <td align="center" height="50" width="100">
+                <b>Sri</b>
+            </td>
+            <td align="center" height="50" width="100">
+                <b>Cet</b>
+            </td>
+            <td align="center" height="50" width="100">
+                <b>Pet</b>
+            </td>
+            <td align="center" height="50" width="100">
+                <b>Sub</b>
+            </td>
+            <td align="center" height="50" width="100">
+                <b>Ned</b>
+            </td>
         </tr>
-    </thead>
-    <tbody>
         @foreach (var timeSlot in classSchedule.Select(c => c.StartTime.TimeOfDay).Distinct())
         {
             <tr>
@@ -73,5 +87,5 @@
                 }
             </tr>
         }
-    </tbody>
-</table>
+    </table>
+</section>
