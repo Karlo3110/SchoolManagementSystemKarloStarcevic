@@ -1,91 +1,101 @@
-﻿@{
+﻿@using System.Globalization
+
+@{
     ViewData["Title"] = "Home";
     var teachers = ViewBag.Teachers as List<SchoolManagementSystemKarloStarcevic.Models.Teacher>;
     var students = ViewBag.Students as List<SchoolManagementSystemKarloStarcevic.Models.Student>;
     var subjects = ViewBag.Subjects as List<SchoolManagementSystemKarloStarcevic.Models.Subject>;
     var classSchedule = ViewBag.ClassSchedule as List<SchoolManagementSystemKarloStarcevic.Models.ClassSchedule>;
+    var currentDate = DateTime.Now;
+    var currentWeek = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(currentDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
 }
 
-<h1>Profesori</h1>
-<div class="d-flex justify-content-center align-items-center flex-row">
-    @foreach (var teacher in teachers)
-    {
-        <div class="d-flex flex-column justify-content-start align-items-center m-4" style="width: 200px; height: auto;">
-            <img src="https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg" class="rounded-circle" style="width: 150px; height: 150px;" />
-            <h3>@teacher.FirstName @teacher.LastName</h3>
+<!-- Lijevi sidebar: Studenti Profesori -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <h1>Studenti</h1>
+            @foreach (var student in students)
+            {
+                <div class="d-flex flex-column justify-content-start align-items-center m-4">
+                    <img src="https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg" class="rounded-circle" style="width: 150px; height: 150px;" />
+                    <h3>@student.FirstName @student.LastName</h3>
+                </div>
+            }
+
+            <h1>Profesori</h1>
+            @foreach (var teacher in teachers)
+            {
+                <div class="d-flex flex-column justify-content-start align-items-center m-4">
+                    <img src="https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg" class="rounded-circle" style="width: 150px; height: 150px;" />
+                    <h3>@teacher.FirstName @teacher.LastName</h3>
+                </div>
+            }
         </div>
-        
-    }
-</div>
-<hr />
-<h1>Studenti</h1>
-<div class="d-flex justify-content-center align-items-center flex-row">
-    @foreach (var student in students)
-    {
-        <div class="d-flex flex-column justify-content-start align-items-center m-4" style="width: 200px; height: auto;">
-            <img src="https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg" class="rounded-circle" style="width: 150px; height: 150px;" />
-            <h3>@student.FirstName @student.LastName</h3>
-        </div>
-    }
-</div>
-<hr />
-<h1>Predmeti</h1>
-<div class="d-flex justify-content-center align-items-center flex-row">
-        @foreach (var subject in subjects)
-        {
-        <div class="d-flex flex-column justify-content-start align-items-center m-4" style="width: 200px; height: auto;">
-                <h3>@subject.SubjectName</h3>
-            <img src="https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg" class="rounded-circle" style="width: 150px; height: 150px;" />
-                <h3>@subject.Teacher.FirstName @subject.Teacher.LastName</h3>
-            </div>
-        }
-</div>
-<hr />
-<h1>Raspored</h1>
-<section id="schedule" class="mt-4">
-    <table class="table" border="2" cellspacing="0" align="center">
-        <tr>
-            <td align="center" height="50" width="100">
-                <br><b>Sati/Dani</b></br>
-            </td>
-            <td align="center" height="50" width="100">
-                <b>Pon</b>
-            </td>
-            <td align="center" height="50" width="100">
-                <b>Uto</b>
-            </td>
-            <td align="center" height="50" width="100">
-                <b>Sri</b>
-            </td>
-            <td align="center" height="50" width="100">
-                <b>Cet</b>
-            </td>
-            <td align="center" height="50" width="100">
-                <b>Pet</b>
-            </td>
-            <td align="center" height="50" width="100">
-                <b>Sub</b>
-            </td>
-            <td align="center" height="50" width="100">
-                <b>Ned</b>
-            </td>
-        </tr>
-        @foreach (var timeSlot in classSchedule.Select(c => c.StartTime.TimeOfDay).Distinct())
-        {
-            <tr>
-                <td>@timeSlot</td>
-                @for (var day = DayOfWeek.Monday; day <= DayOfWeek.Friday; day++)
-                {
-                    var schedule = classSchedule.FirstOrDefault(c => c.StartTime.DayOfWeek == day && c.StartTime.TimeOfDay == timeSlot);
-                    <td>
-                        @if (schedule != null)
+
+        <!-- Srednji content: Raspored -->
+        <div class="col-md-6">
+            <h1>Raspored</h1>
+            <section id="schedule" class="mt-4">
+                <div>
+                    <a href="#" id="prevWeek">Previous Week</a>
+                    <span>Week @(currentWeek)</span>
+                    <a href="#" id="nextWeek">Next Week</a>
+                </div>
+                <div id="scheduleContent">
+                    <table class="table table-bordered" cellspacing="0">
+                        <tr>
+                            <td class="text-center" height="50" width="100"><b>Sati/Dani</b></td>
+                            <td class="text-center" height="50" width="100"><b>Pon</b></td>
+                            <td class="text-center" height="50" width="100"><b>Uto</b></td>
+                            <td class="text-center" height="50" width="100"><b>Sri</b></td>
+                            <td class="text-center" height="50" width="100"><b>Cet</b></td>
+                            <td class="text-center" height="50" width="100"><b>Pet</b></td>
+                            <td class="text-center" height="50" width="100"><b>Sub</b></td>
+                            <td class="text-center" height="50" width="100"><b>Ned</b></td>
+                        </tr>
+                        @foreach (var timeSlot in classSchedule
+                        .Where(c => CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(c.StartTime, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday) == currentWeek)
+                        .Select(c => c.StartTime.TimeOfDay)
+                        .Distinct())
                         {
-                            <p>@schedule.Subject.SubjectName</p>
-                            <p>@schedule.Teacher.FirstName @schedule.Teacher.LastName</p>
+                            <tr>
+                                <td>@timeSlot</td>
+                                @for (var day = DayOfWeek.Monday; day <= DayOfWeek.Friday; day++)
+                                {
+                                    var schedule = classSchedule.FirstOrDefault(c =>
+                                    c.StartTime.DayOfWeek == day &&
+                                    c.StartTime.TimeOfDay == timeSlot &&
+                                    CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(c.StartTime, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday) == currentWeek);
+
+                                    <td class="text-center">
+                                        @if (schedule != null)
+                                        {
+                                            <p>@schedule.Subject.SubjectName</p>
+                                            <p>@schedule.Teacher.FirstName @schedule.Teacher.LastName</p>
+                                        }
+                                    </td>
+                                }
+                            </tr>
                         }
-                    </td>
-                }
-            </tr>
-        }
-    </table>
-</section>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- Desni sidebar: Objave -->
+        <div class="col-md-3">
+            <h1>Objave</h1>
+            @foreach (var post in ViewBag.Posts as List<SchoolManagementSystemKarloStarcevic.Models.Post>)
+            {
+                <div class="card m-4">
+                    <div class="card-body">
+                        <h5 class="card-title">@post.Title</h5>
+                        <p class="card-text">@post.Content</p>
+                        <p class="card-text"><small class="text-muted">Posted by @post.User.UserName on @post.DateOfPosting</small></p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

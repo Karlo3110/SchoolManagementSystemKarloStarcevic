@@ -14,6 +14,7 @@ namespace SchoolManagementSystemKarloStarcevic.Models
         [Display(Name = "Teacher")]
         public int TeacherId { get; set; }
         public Teacher Teacher { get; set; }
+        //predmet moze imati listu studenta - nije implementirano
         public ICollection<Student> Students { get; set; } = new List<Student>();
     }
 }

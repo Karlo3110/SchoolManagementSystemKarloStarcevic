@@ -20,7 +20,7 @@ namespace SchoolManagementSystemKarloStarcevic.Models
         [Required(ErrorMessage = "Field Birth date is required.")]
         [Display(Name = "Birth date")]
         public DateTime BirthDate { get; set; }
-
+        //profesor moze odrzavati predmet - prilikom kreiranja se nudi predmet
         public ICollection<Subject> SubjectsTaught { get; set; } = new List<Subject>();
     }
 }

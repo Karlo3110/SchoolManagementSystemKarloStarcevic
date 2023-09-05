@@ -21,6 +21,7 @@ namespace SchoolManagementSystemKarloStarcevic.Models
         [Display(Name = "Birth Date")]
         public DateTime BirthDate { get; set; }
 
+        //Student moze imati listu predmeta na kojima sudjeluje - nije implementirano
         public ICollection<Subject> SubjectsAttended { get; set; } = new List<Subject>();
     }
 }

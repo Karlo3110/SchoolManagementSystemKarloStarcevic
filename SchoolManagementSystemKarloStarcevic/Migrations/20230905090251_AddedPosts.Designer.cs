@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolManagementSystemKarloStarcevic.Data;
 
-namespace SchoolManagementSystemKarloStarcevic.Data.Migrations
+namespace SchoolManagementSystemKarloStarcevic.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230905090251_AddedPosts")]
+    partial class AddedPosts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,6 +221,34 @@ namespace SchoolManagementSystemKarloStarcevic.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Post", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfPosting")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Posts");
+                });
+
             modelBuilder.Entity("SchoolManagementSystemKarloStarcevic.Models.ClassSchedule", b =>
                 {
                     b.Property<int>("Id")
@@ -281,7 +311,12 @@ namespace SchoolManagementSystemKarloStarcevic.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Subjects");
                 });
@@ -322,21 +357,6 @@ namespace SchoolManagementSystemKarloStarcevic.Data.Migrations
                     b.HasIndex("SubjectsAttendedId");
 
                     b.ToTable("StudentSubject");
-                });
-
-            modelBuilder.Entity("SubjectTeacher", b =>
-                {
-                    b.Property<int>("SubjectsTaughtId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TeachersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SubjectsTaughtId", "TeachersId");
-
-                    b.HasIndex("TeachersId");
-
-                    b.ToTable("SubjectTeacher");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -390,12 +410,21 @@ namespace SchoolManagementSystemKarloStarcevic.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Post", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SchoolManagementSystemKarloStarcevic.Models.ClassSchedule", b =>
                 {
                     b.HasOne("SchoolManagementSystemKarloStarcevic.Models.Subject", "Subject")
                         .WithMany()
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SchoolManagementSystemKarloStarcevic.Models.Teacher", "Teacher")
@@ -405,6 +434,17 @@ namespace SchoolManagementSystemKarloStarcevic.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("SchoolManagementSystemKarloStarcevic.Models.Subject", b =>
+                {
+                    b.HasOne("SchoolManagementSystemKarloStarcevic.Models.Teacher", "Teacher")
+                        .WithMany("SubjectsTaught")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Teacher");
                 });
@@ -424,19 +464,9 @@ namespace SchoolManagementSystemKarloStarcevic.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SubjectTeacher", b =>
+            modelBuilder.Entity("SchoolManagementSystemKarloStarcevic.Models.Teacher", b =>
                 {
-                    b.HasOne("SchoolManagementSystemKarloStarcevic.Models.Subject", null)
-                        .WithMany()
-                        .HasForeignKey("SubjectsTaughtId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SchoolManagementSystemKarloStarcevic.Models.Teacher", null)
-                        .WithMany()
-                        .HasForeignKey("TeachersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("SubjectsTaught");
                 });
 #pragma warning restore 612, 618
         }
