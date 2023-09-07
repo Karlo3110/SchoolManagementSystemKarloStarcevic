@@ -11,22 +11,23 @@
 }
 
 <!-- Lijevi sidebar: Studenti Profesori -->
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2">
-            <h1>Studenti</h1>
+            <h3>Studenti</h3>
             @foreach (var student in students)
             {
                 <div class="d-flex flex-column justify-content-start align-items-start">
-                    <p>@student.FirstName @student.LastName,</p>
+                    <p>@student.FirstName @student.LastName</p>
                 </div>
             }
 
-            <h1>Profesori</h1>
+            <h3>Profesori</h3>
             @foreach (var teacher in teachers)
             {
                 <div class="d-flex flex-column justify-content-start align-items-start">
-                    <p>@teacher.FirstName @teacher.LastName,</p>
+                    <p>@teacher.FirstName @teacher.LastName</p>
                 </div>
             }
         </div>
@@ -36,6 +37,7 @@
             <h1>Raspored</h1>
             <section id="schedule" class="mt-4">
                 <div id="scheduleContent">
+                    <div class="table-responsive">
                     <table class="table table-bordered" cellspacing="0">
                         <tr>
                             <td class="text-center" height="50" width="100"><b>Sati/Dani</b></td>
@@ -44,8 +46,6 @@
                             <td class="text-center" height="50" width="100"><b>Sri</b></td>
                             <td class="text-center" height="50" width="100"><b>Cet</b></td>
                             <td class="text-center" height="50" width="100"><b>Pet</b></td>
-                            <td class="text-center" height="50" width="100"><b>Sub</b></td>
-                            <td class="text-center" height="50" width="100"><b>Ned</b></td>
                         </tr>
                         @foreach (var timeSlot in classSchedule
                         .Where(c => CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(c.StartTime, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday) == currentWeek)
@@ -74,6 +74,7 @@
                             </tr>
                         }
                     </table>
+                    </div>
                 </div>
             </section>
         </div>
