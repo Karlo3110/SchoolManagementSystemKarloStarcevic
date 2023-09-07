@@ -13,22 +13,20 @@
 <!-- Lijevi sidebar: Studenti Profesori -->
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <h1>Studenti</h1>
             @foreach (var student in students)
             {
-                <div class="d-flex flex-column justify-content-start align-items-center m-4">
-                    <img src="https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg" class="rounded-circle" style="width: 150px; height: 150px;" />
-                    <h3>@student.FirstName @student.LastName</h3>
+                <div class="d-flex flex-column justify-content-start align-items-start">
+                    <p>@student.FirstName @student.LastName,</p>
                 </div>
             }
 
             <h1>Profesori</h1>
             @foreach (var teacher in teachers)
             {
-                <div class="d-flex flex-column justify-content-start align-items-center m-4">
-                    <img src="https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg" class="rounded-circle" style="width: 150px; height: 150px;" />
-                    <h3>@teacher.FirstName @teacher.LastName</h3>
+                <div class="d-flex flex-column justify-content-start align-items-start">
+                    <p>@teacher.FirstName @teacher.LastName,</p>
                 </div>
             }
         </div>
@@ -37,11 +35,6 @@
         <div class="col-md-6">
             <h1>Raspored</h1>
             <section id="schedule" class="mt-4">
-                <div>
-                    <a href="#" id="prevWeek">Previous Week</a>
-                    <span>Week @(currentWeek)</span>
-                    <a href="#" id="nextWeek">Next Week</a>
-                </div>
                 <div id="scheduleContent">
                     <table class="table table-bordered" cellspacing="0">
                         <tr>
@@ -57,12 +50,14 @@
                         @foreach (var timeSlot in classSchedule
                         .Where(c => CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(c.StartTime, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday) == currentWeek)
                         .Select(c => c.StartTime.TimeOfDay)
-                        .Distinct())
+                        .Distinct()
+                        .OrderBy(timeSlot => timeSlot))
                         {
                             <tr>
                                 <td>@timeSlot</td>
                                 @for (var day = DayOfWeek.Monday; day <= DayOfWeek.Friday; day++)
                                 {
+                                    var dayOfWeek = (int)day;
                                     var schedule = classSchedule.FirstOrDefault(c =>
                                     c.StartTime.DayOfWeek == day &&
                                     c.StartTime.TimeOfDay == timeSlot &&
@@ -83,8 +78,9 @@
             </section>
         </div>
 
+
         <!-- Desni sidebar: Objave -->
-        <div class="col-md-3">
+        <div class="col-md-4">
             <h1>Objave</h1>
             @foreach (var post in ViewBag.Posts as List<SchoolManagementSystemKarloStarcevic.Models.Post>)
             {
@@ -92,7 +88,7 @@
                     <div class="card-body">
                         <h5 class="card-title">@post.Title</h5>
                         <p class="card-text">@post.Content</p>
-                        <p class="card-text"><small class="text-muted">Posted by @post.User.UserName on @post.DateOfPosting</small></p>
+                        <p class="card-text"><small class="text-muted">Objavio/la @post.User.UserName datuma @post.DateOfPosting</small></p>
                     </div>
                 </div>
             }
